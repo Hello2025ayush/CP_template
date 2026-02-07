@@ -1,26 +1,37 @@
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
-template<class T> using oset = tree<T, null_type, less<T>, rb_tree_tag,     tree_order_statistics_node_update>;
+using oset = tree<pair<long long, long long>, null_type, less<pair<long long, long long>>, rb_tree_tag, tree_order_statistics_node_update>;
+
+//  CAUTIONNNN !!!! bsdk...    replace in code ::: int --> ll  (fking overflow...);
+
+
 // find_by_order, order_of_key
-
-
 /*
 
-oset<ll> s          // declaration
-s.insert(18)        // insert
-less -> greater     // store ele in descending order
-less -> less_equal  // becomes multiset
-s.erase(value)      // O(logn)  -> nothing happens if not present
-s.order_of_key(val) // O(logn)
+    oset s;  // kind of a multiset using {val, idx}
 
-TRICK --> s.order_of_key(val) --> no. of ele strictly less that this val.
+    s.size()                    ==> Yees it works.
+    s.insert({val , idx});
+    s.erase({val, idx});          !! does nothing if not present
 
-s.find_by_order(3)  // O(logn) return iterator  of value at index 3 (0 - based)
-*(above) == index (0 based)
+    s.order_of_key({val, idx});  ---> no. of values strictly!! < {val, idx};
+
+                                     {val, idx-1}  <  {val, idx};
+
+    auto it = s.find_by_order(6) ---> returns (iterator) to 6th index value in set (0-based !!);
+
+    auto[val, idx] = *it;
+
+    ... use the idk to do shit..
 
 
-s.lower_bound()  --> same as set
-s.upper_bound()  --> same as set
-
+    SETUP ---
+               1) remove #define int long long and use ll whenever want
+               
 */
+
+ll idk(oset &s, ll l, ll r) {
+    // [l...r] incl. boht
+    return s.order_of_key({r, inf}) - s.order_of_key({l, -inf});
+}
